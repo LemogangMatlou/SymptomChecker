@@ -11,8 +11,6 @@ st.set_page_config(page_title='SymptomChecker',initial_sidebar_state='auto')
 st.subheader('Please type in your symptoms below')
 
 df = pd.read_csv('data.csv')
-df_des = pd.read_csv('symptom_Description.csv')
-df_precautions = pd.read_csv('Precaution.csv')
 
 df['disease_id'] = df['Disease'].factorize()[0]
 category_id_df = df[['Disease','disease_id']].drop_duplicates().sort_values('disease_id')
