@@ -5,13 +5,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 import streamlit as st 
-import pickle
 
 st.set_page_config(page_title='SymptomChecker',initial_sidebar_state='auto')
 
 st.subheader('Please type in your symptoms below')
 
 df = pd.read_csv('data.csv')
+df_des = pd.read_csv('symptom_Description.csv')
+df_precautions = pd.read_csv('Precaution.csv')
 
 df['disease_id'] = df['Disease'].factorize()[0]
 category_id_df = df[['Disease','disease_id']].drop_duplicates().sort_values('disease_id')
@@ -27,9 +28,7 @@ count_vect = CountVectorizer()
 X_train_counts = count_vect.fit_transform(X_train)
 tfidf_transformer = TfidfTransformer()
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-
-pickle_in = open('Symptom.pickle' , 'rb')
-clf = pickle.load(pickle_in)
+clf = MultinomialNB().fit(X_train_tfidf, y_train)
 
 input_text = st.text_area("Please type in your symptoms here",height=175)
 
